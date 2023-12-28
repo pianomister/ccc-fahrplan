@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { CEvent } from './Fahrplan';
 import './Appointment.css';
+import { useLocalStorage } from './utils';
 
 const bigRooms = ['Saal 1', 'Saal Zuse', 'Saal Granville']
 
@@ -26,6 +27,11 @@ interface Props {
 }
 
 const Appointment: FC<Props> = ({ data }: Props) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [isRemoved, setIsRemoved] = useLocalStorage<boolean>(`event-${data.id}-removed`, false)
+  const [isFavorite, setIsFavorite] = useLocalStorage<boolean>(`event-${data.id}-favorite`, false)
+
+  if (isRemoved) return null
 
   const date = new Date(data.date)
   const hours = date.getHours()
@@ -39,12 +45,22 @@ const Appointment: FC<Props> = ({ data }: Props) => {
   const isBigTalk = bigRooms.includes(data.room)
   const isCurrentlyRunning = isRunning(data)
 
-  return <div className={`Appointment${isBigTalk ? ' isBigTalk' : ''}${isCurrentlyRunning ? ' isRunning' : ''}`}>
+  function toggleDetails() {
+    setIsExpanded(!isExpanded)
+  }
+
+  return <div className={`Appointment${isBigTalk ? ' isBigTalk' : ''}${isCurrentlyRunning ? ' isRunning' : ''}${isFavorite ? ' isFavorite' : ''}`}
+              onClick={toggleDetails}>
     <h3 className="Appointment-Time">{hours}:{minutes}</h3>
-    <h4 className="Appointment-Title"><a href={data.url}>{data.title}</a></h4>
+    <h4 className="Appointment-Title"><a target="_blank" href={data.url}>{data.title}</a></h4>
     <p className="Appointment-Meta">{weekday} | {data.duration}h</p>
     <p className="Appointment-Room">{data.room}</p>
-    <p className="Appointment-Abstract">{data.abstract}</p>
+    {isExpanded && <>
+      <div className="Appointment-Buttons">
+        <button className="Appointment-Button remove" onClick={() => setIsRemoved(true)}>Remove</button>
+        <button className="Appointment-Button favorite" onClick={() => setIsFavorite(!isFavorite)}>Favorite</button>
+      </div>
+      <p className="Appointment-Abstract"><br/>{data.abstract}<br/><br/>{data.description}</p></>}
   </div>;
 };
 

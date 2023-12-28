@@ -3,19 +3,31 @@
   grid-template-areas: "time meta"
       "title title"
 "room room"
+  "buttons buttons"
 "abstract abstract";
   margin: 1em 0;
   padding: 1em;
-  border: 1px solid green;
+  border: 1px solid #555;
   text-align: left;
   background-color: #333;
+  color: #fff;
+  cursor: pointer;
 
   &.isBigTalk {
     border-width: 1rem;
   }
 
   &.isRunning {
+    border-color: #050;
     background-color: #030;
+  }
+
+  &.isFavorite {
+    border-color: orange;
+
+    &.isRunning {
+    background-color: #885c00;
+  }
   }
 }
 
@@ -29,7 +41,7 @@
   margin: 0.5rem 0;
 
   & > a {
-    color: lightblue;
+    color: lightgreen;
     text-decoration: none;
   }
 }
@@ -49,4 +61,22 @@
 .Appointment-Abstract {
   grid-area: abstract;
   opacity: .7;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.Appointment-Buttons {
+  grid-area: buttons;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  max-width: 100%;
+}
+
+.Appointment-Button {
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, .4);
+  color: inherit;
+  border: 0;
+  margin-left: 0.5rem;
 }

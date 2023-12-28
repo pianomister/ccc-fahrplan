@@ -2,6 +2,8 @@ import { FC, useEffect, useState } from 'react';
 // import useSWR from 'swr';
 import axios from 'axios';
 import Appointment, { getEndTime } from './Appointment';
+import { schedule } from './schedule';
+import './Fahrplan.css'
 
 export interface CEvent {
   abstract: string
@@ -64,6 +66,7 @@ const Fahrplan: FC = () => {
   const [error, setError] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
+  //*
   useEffect(() => {
     axios.get('https://corsproxy.io/?https%3A%2F%2Ffahrplan.events.ccc.de%2Fcongress%2F2023%2Ffahrplan%2Fschedule.json', {
       headers: {
@@ -78,14 +81,20 @@ const Fahrplan: FC = () => {
       .catch(err => setError(err))
       .finally(() => setIsLoading(false))
   }, []);
+  //*/
+  /*
+  useEffect(() => {
+    setData(schedule)
+    setIsLoading(false)
+  }, []);
+  //*/
 
   if (error) return <div>failed to load with status {error.status}</div>
   if (isLoading) return <div>loading ...</div>
 
   const events = sortEvents(data)
 
-  return <div>
-    <h2>{data.schedule.conference.title}</h2>
+  return <div className="Fahrplan">
     {events.map((event) => {
       return <Appointment data={event}/>
     })}
