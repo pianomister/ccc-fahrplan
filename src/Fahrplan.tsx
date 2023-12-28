@@ -69,7 +69,7 @@ const Fahrplan: FC = () => {
 
   //*
   useEffect(() => {
-    axios.get('https://corsproxy.io/?https%3A%2F%2Ffahrplan.events.ccc.de%2Fcongress%2F2023%2Ffahrplan%2Fschedule.json', {
+    axios.get(`https://corsproxy.io/?https%3A%2F%2Ffahrplan.events.ccc.de%2Fcongress%2F2023%2Ffahrplan%2Fschedule.json?rand=${(new Date()).getTime()}`, {
       headers: {
         'Accept': 'application/json',
         'Access-Control-Allow-Origin': '*'
