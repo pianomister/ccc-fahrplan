@@ -1,0 +1,31 @@
+.Appointment {
+  display: grid;
+  grid-template-areas: "title title"
+"time room"
+"abstract abstract";
+  margin: 1em;
+  padding: 1em;
+  border: 1px solid green;
+  text-align: left;
+   background-color: #333;
+}
+
+.Appointment-Title {
+  grid-area: title;
+
+  & > a {
+    color: lightblue;
+  }
+}
+
+.Appointment-Time {
+  grid-area: time;
+}
+
+.Appointment-Room {
+  grid-area: room;
+}
+
+.Appointment-Abstract {
+  grid-area: abstract;
+}
