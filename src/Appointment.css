@@ -1,31 +1,52 @@
 .Appointment {
   display: grid;
-  grid-template-areas: "title title"
-"time room"
+  grid-template-areas: "time meta"
+      "title title"
+"room room"
 "abstract abstract";
-  margin: 1em;
+  margin: 1em 0;
   padding: 1em;
   border: 1px solid green;
   text-align: left;
-   background-color: #333;
-}
+  background-color: #333;
 
-.Appointment-Title {
-  grid-area: title;
+  &.isBigTalk {
+    border-width: 1rem;
+  }
 
-  & > a {
-    color: lightblue;
+  &.isRunning {
+    background-color: #030;
   }
 }
 
 .Appointment-Time {
   grid-area: time;
+  margin: 0;
+}
+
+.Appointment-Title {
+  grid-area: title;
+  margin: 0.5rem 0;
+
+  & > a {
+    color: lightblue;
+    text-decoration: none;
+  }
+}
+
+.Appointment-Meta {
+  grid-area: meta;
+  margin: 0;
+  text-align: right;
 }
 
 .Appointment-Room {
   grid-area: room;
+  margin: 0;
+  font-style: italic;
 }
 
 .Appointment-Abstract {
   grid-area: abstract;
+  opacity: .7;
 }

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 // import useSWR from 'swr';
 import axios from 'axios';
-import Appointment from './Appointment';
+import Appointment, { getEndTime } from './Appointment';
 
 export interface CEvent {
   abstract: string
@@ -40,12 +40,9 @@ function sortEvents(data: any): CEvent[] {
       roomEvents.forEach((roomEvent) => {
 
         // filter past events
-        const [hours, minutes] = roomEvent.duration.split(':')
-        const date = new Date(roomEvent.date)
-        let timestamp = date.getTime()
-        timestamp += parseInt(hours) * 60 * 60 * 1000 + parseInt(minutes) * 60 * 1000;
+        const timestamp = getEndTime(roomEvent)
 
-        if (timestampNow >= timestamp) {
+        if (timestampNow <= timestamp) {
           list.push({
             ...roomEvent,
             room: roomName
