@@ -3,7 +3,7 @@
   grid-template-areas: "time meta"
       "title title"
 "room room"
-  "buttons buttons"
+  "link buttons"
 "abstract abstract";
   margin: 1em 0;
   padding: 1em;
@@ -26,8 +26,16 @@
     border-color: orange;
 
     &.isRunning {
-    background-color: #885c00;
+      background-color: #885c00;
+    }
   }
+}
+
+.Appointment-Link {
+  margin-top: 1rem;
+  & > a {
+    color: lightgreen;
+    text-decoration: none;
   }
 }
 
@@ -39,11 +47,6 @@
 .Appointment-Title {
   grid-area: title;
   margin: 0.5rem 0;
-
-  & > a {
-    color: lightgreen;
-    text-decoration: none;
-  }
 }
 
 .Appointment-Meta {

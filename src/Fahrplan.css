@@ -1,3 +1,11 @@
 .Fahrplan {
   margin: 1rem;
 }
+
+.Fahrplan-Expand {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  padding: 0.3rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

@@ -15,7 +15,7 @@ export interface CEvent {
   language: string
   links: string[]
   logo: string
-  persons: string[]
+  persons: any[]
   room: string
   slug: string
   start: string
@@ -65,6 +65,7 @@ const Fahrplan: FC = () => {
   const [data, setData] = useState<any>()
   const [error, setError] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [expanded, setExpanded] = useState<boolean>(false)
 
   //*
   useEffect(() => {
@@ -95,6 +96,15 @@ const Fahrplan: FC = () => {
   const events = sortEvents(data)
 
   return <div className="Fahrplan">
+    <span className="Fahrplan-Expand" onClick={() => setExpanded(!expanded)}>{expanded ? 'Hide' : 'Show'} hidden entries</span>
+    {expanded &&
+      <div className="RemovedEvents">
+        {events.map((event) => {
+          return <Appointment data={event} showRemoved={true}/>
+        })}
+        <hr/>
+      </div>
+    }
     {events.map((event) => {
       return <Appointment data={event}/>
     })}

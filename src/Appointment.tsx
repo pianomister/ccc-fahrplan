@@ -24,14 +24,15 @@ function isRunning(event: CEvent): boolean {
 
 interface Props {
   data: CEvent
+  showRemoved?: boolean
 }
 
-const Appointment: FC<Props> = ({ data }: Props) => {
+const Appointment: FC<Props> = ({ data, showRemoved = false }: Props) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isRemoved, setIsRemoved] = useLocalStorage<boolean>(`event-${data.id}-removed`, false)
   const [isFavorite, setIsFavorite] = useLocalStorage<boolean>(`event-${data.id}-favorite`, false)
 
-  if (isRemoved) return null
+  if ((isRemoved && !showRemoved) || (!isRemoved && showRemoved)) return null
 
   const date = new Date(data.date)
   const hours = date.getHours()
@@ -41,6 +42,8 @@ const Appointment: FC<Props> = ({ data }: Props) => {
   const weekday = new Intl.DateTimeFormat(['en'], {
     weekday: 'short'
   }).format(date);
+
+  const speakers = data.persons.map(person => person.name).join(', ')
 
   const isBigTalk = bigRooms.includes(data.room)
   const isCurrentlyRunning = isRunning(data)
@@ -52,12 +55,13 @@ const Appointment: FC<Props> = ({ data }: Props) => {
   return <div className={`Appointment${isBigTalk ? ' isBigTalk' : ''}${isCurrentlyRunning ? ' isRunning' : ''}${isFavorite ? ' isFavorite' : ''}`}
               onClick={toggleDetails}>
     <h3 className="Appointment-Time">{hours}:{minutes}</h3>
-    <h4 className="Appointment-Title"><a target="_blank" href={data.url}>{data.title}</a></h4>
+    <h4 className="Appointment-Title">{data.title}</h4>
     <p className="Appointment-Meta">{weekday} | {data.duration}h</p>
-    <p className="Appointment-Room">{data.room}</p>
+    <p className="Appointment-Room">{data.room} {speakers && '—'} {speakers}</p>
     {isExpanded && <>
+      <span className="Appointment-Link"><a target="_blank" href={data.url}>Event Link</a></span>
       <div className="Appointment-Buttons">
-        <button className="Appointment-Button remove" onClick={() => setIsRemoved(true)}>Remove</button>
+        <button className="Appointment-Button remove" onClick={() => setIsRemoved(!isRemoved)}>{isRemoved ? 'Show' : 'Hide'}</button>
         <button className="Appointment-Button favorite" onClick={() => setIsFavorite(!isFavorite)}>Favorite</button>
       </div>
       <p className="Appointment-Abstract"><br/>{data.abstract}<br/><br/>{data.description}</p></>}
