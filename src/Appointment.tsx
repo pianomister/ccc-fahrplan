@@ -37,7 +37,7 @@ const Appointment: FC<Props> = ({ data, showRemoved = false }: Props) => {
   const date = new Date(data.date)
   const hours = date.getHours()
   let minutes: number | string = date.getMinutes()
-  minutes = minutes === 0 ? '00' : minutes
+  minutes = minutes < 10 ? `0${minutes}` : minutes
 
   const weekday = new Intl.DateTimeFormat(['en'], {
     weekday: 'short'
