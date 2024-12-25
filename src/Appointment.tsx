@@ -75,7 +75,17 @@ const Appointment: FC<Props> = ({talk, rooms, speakers, showRemoved = false}: Pr
         onClick={toggleDetails}>
         <h3 className="Appointment-Time">{hours}:{minutes}</h3>
         <h4 className="Appointment-Title">{title}</h4>
-        <p className="Appointment-Meta">{weekday} | {duration}min</p>
+        <p className="Appointment-Meta">
+            {talk.do_not_record && (
+                <svg className="Appointment-DoNotRecord" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/>
+                    <path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/>
+                    <path d="m2 2 20 20"/>
+                </svg>
+            )}
+            {weekday} | {duration}min
+        </p>
         <p className="Appointment-Room">{room && room.name.de} {speaker && '—'} {speaker ?? ''}</p>
         {isExpanded && <>
             <div className="Appointment-Buttons">

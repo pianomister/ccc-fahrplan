@@ -52,7 +52,9 @@
 .Appointment-Meta {
   grid-area: meta;
   margin: 0;
-  text-align: right;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .Appointment-Room {
@@ -82,4 +84,10 @@
   color: inherit;
   border: 0;
   margin-left: 0.5rem;
+}
+
+svg.Appointment-DoNotRecord {
+  width: 1em;
+  height: auto;
+  padding-inline-end: 1em;
 }
