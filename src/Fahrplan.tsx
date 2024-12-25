@@ -2,14 +2,14 @@ import {FC, useEffect, useState} from 'react';
 import useSWR from 'swr';
 import Appointment, {getEndTime} from './Appointment';
 import './Fahrplan.css'
-import {CEvent, Conference, Room, RoomsMap, Speaker, SpeakersMap, Talk} from "./models";
+import {Conference, Room, RoomsMap, Speaker, SpeakersMap, Talk} from "./models";
 
 const fetcher = (...args: any[]) => {
     // @ts-ignore
     return fetch(...args).then(res => res.json());
 }
 
-function sortEvents(data: Conference): Talk[] {
+function sortTalks(data: Conference): Talk[] {
     const now = new Date();
     const timestampNow = now.getTime()
 
@@ -17,7 +17,7 @@ function sortEvents(data: Conference): Talk[] {
         const timestamp = getEndTime(talk)
         return timestampNow <= timestamp
     })
-    talks.sort((a: CEvent, b: CEvent) => a.start > b.start ? 1 : a.start < b.start ? -1 : 0)
+    talks.sort((a: Talk, b: Talk) => a.start > b.start ? 1 : a.start < b.start ? -1 : 0)
     return talks
 }
 
@@ -73,20 +73,20 @@ const Fahrplan: FC = () => {
     if (error) return <div>failed to load with status {error.status}</div>
     if (isLoading) return <div>loading ...</div>
 
-    const events = sortEvents(data)
+    const talks = sortTalks(data)
 
     return <div className="Fahrplan">
         <span className="Fahrplan-Expand" onClick={() => setExpanded(!expanded)}>{expanded ? 'Hide' : 'Show'} hidden entries</span>
         {expanded &&
             <div className="RemovedEvents">
-                {events.map((event) => {
-                    return <Appointment data={event} speakers={speakersMap} rooms={roomsMap} showRemoved={true}/>
+                {talks.map((talk) => {
+                    return <Appointment talk={talk} speakers={speakersMap} rooms={roomsMap} showRemoved={true}/>
                 })}
                 <hr/>
             </div>
         }
-        {events.map((event) => {
-            return <Appointment data={event} speakers={speakersMap} rooms={roomsMap}/>
+        {talks.map((talk) => {
+            return <Appointment talk={talk} speakers={speakersMap} rooms={roomsMap}/>
         })}
     </div>
 };

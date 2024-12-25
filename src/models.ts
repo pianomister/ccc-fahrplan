@@ -67,5 +67,3 @@ export interface Speaker {
 
 export type RoomsMap = Record<RoomId, Room>
 export type SpeakersMap = Record<Code, Speaker>
-
-export type CEvent = Talk

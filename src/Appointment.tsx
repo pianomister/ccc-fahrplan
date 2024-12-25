@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import './Appointment.css';
 import {useLocalStorage} from './utils';
-import {CEvent, Code, MaybeLocalized, RoomsMap, SpeakersMap} from "./models";
+import {Code, MaybeLocalized, RoomsMap, SpeakersMap, Talk} from "./models";
 
 const bigRooms = ['Saal 1', 'Saal GLITCH', 'Saal ZIGZAG']
 
@@ -9,14 +9,18 @@ export function getLocalized(maybeLocalized: MaybeLocalized): string {
     return typeof maybeLocalized === 'string' ? maybeLocalized : maybeLocalized.de
 }
 
-export function getStartTime(event: CEvent): number {
-    const start = new Date(event.start);
+export function getStartTime(talk: Talk): number {
+    const start = new Date(talk.start);
     return start.getTime();
 }
 
-export function getEndTime(event: CEvent): number {
-    const end = new Date(event.end);
+export function getEndTime(talk: Talk): number {
+    const end = new Date(talk.end);
     return end.getTime();
+}
+
+export function getDuration(talk: Talk): number {
+    return talk.duration ?? ((getEndTime(talk) - getStartTime(talk)) / 1000 / 60)
 }
 
 export function getSpeakerNames(speakers: SpeakersMap, speakerCodes?: Code[]): string[] {
@@ -25,27 +29,27 @@ export function getSpeakerNames(speakers: SpeakersMap, speakerCodes?: Code[]): s
         .map(speaker => speaker.name) ?? []
 }
 
-function isRunning(event: CEvent): boolean {
+function isRunning(talk: Talk): boolean {
     const date = new Date()
     const now = date.getTime()
-    return now >= getStartTime(event) && now <= getEndTime(event)
+    return now >= getStartTime(talk) && now <= getEndTime(talk)
 }
 
 interface Props {
-    data: CEvent
+    talk: Talk
     rooms: RoomsMap
     speakers: SpeakersMap
     showRemoved?: boolean
 }
 
-const Appointment: FC<Props> = ({data, rooms, speakers, showRemoved = false}: Props) => {
+const Appointment: FC<Props> = ({talk, rooms, speakers, showRemoved = false}: Props) => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
-    const [isRemoved, setIsRemoved] = useLocalStorage<boolean>(`event-${data.id}-removed`, false)
-    const [isFavorite, setIsFavorite] = useLocalStorage<boolean>(`event-${data.id}-favorite`, false)
+    const [isRemoved, setIsRemoved] = useLocalStorage<boolean>(`event-${talk.id}-${talk.code}-removed`, false)
+    const [isFavorite, setIsFavorite] = useLocalStorage<boolean>(`event-${talk.id}-${talk.code}-favorite`, false)
 
     if ((isRemoved && !showRemoved) || (!isRemoved && showRemoved)) return null
 
-    const start = new Date(data.start)
+    const start = new Date(talk.start)
     const hours = start.getHours()
     let minutes: number | string = start.getMinutes()
     minutes = minutes < 10 ? `0${minutes}` : minutes
@@ -54,12 +58,13 @@ const Appointment: FC<Props> = ({data, rooms, speakers, showRemoved = false}: Pr
         weekday: 'short'
     }).format(start);
 
-    const speaker = getSpeakerNames(speakers, data.speakers).join(', ')
-    const room = data.room ? rooms[data.room] : undefined
-    const title = getLocalized(data.title)
+    const speaker = getSpeakerNames(speakers, talk.speakers).join(', ')
+    const room = talk.room ? rooms[talk.room] : undefined
+    const title = getLocalized(talk.title)
+    const duration = getDuration(talk)
 
     const isBigTalk = room ? bigRooms.includes(room.name.de) : false
-    const isCurrentlyRunning = isRunning(data)
+    const isCurrentlyRunning = isRunning(talk)
 
     function toggleDetails() {
         setIsExpanded(!isExpanded)
@@ -70,7 +75,7 @@ const Appointment: FC<Props> = ({data, rooms, speakers, showRemoved = false}: Pr
         onClick={toggleDetails}>
         <h3 className="Appointment-Time">{hours}:{minutes}</h3>
         <h4 className="Appointment-Title">{title}</h4>
-        <p className="Appointment-Meta">{weekday} | {data.duration}min</p>
+        <p className="Appointment-Meta">{weekday} | {duration}min</p>
         <p className="Appointment-Room">{room && room.name.de} {speaker && '—'} {speaker ?? ''}</p>
         {isExpanded && <>
             <div className="Appointment-Buttons">
@@ -79,7 +84,7 @@ const Appointment: FC<Props> = ({data, rooms, speakers, showRemoved = false}: Pr
                 <button className="Appointment-Button favorite" onClick={() => setIsFavorite(!isFavorite)}>Favorite
                 </button>
             </div>
-            <p className="Appointment-Abstract"><br/>{data.abstract}</p></>}
+            <p className="Appointment-Abstract"><br/>{talk.abstract}</p></>}
     </div>;
 };
 
