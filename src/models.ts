@@ -1,4 +1,6 @@
-export type RoomId = number
+import {XmlEvent} from "./models-xml";
+
+export type RoomId = number | string
 export type Code = string
 export type MaybeLocalized = string | Localized
 
@@ -10,24 +12,9 @@ export interface Conference {
     event_end: string
     tracks: Track[]
     rooms: Room[]
-    speakers: Speaker[]
 }
 
-export interface Talk {
-    code?: string
-    id: number
-    title: MaybeLocalized
-    abstract?: string
-    speakers?: Code[]
-    track?: number
-    start: string
-    end: string
-    room: RoomId
-    duration?: number
-    updated?: string
-    state: any
-    do_not_record?: boolean
-}
+export interface Talk extends XmlEvent {}
 
 export interface Track {
     id: number
