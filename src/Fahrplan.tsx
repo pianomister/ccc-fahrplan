@@ -71,8 +71,8 @@ const Fahrplan: FC = () => {
     useEffect(() => {
         axios.get(`https://corsproxy.io/?url=https%3A%2F%2Fapi.events.ccc.de%2Fcongress%2F2024%2Fschedule.xml?rand=${(new Date()).getTime()}`, {
             headers: {
-               'Accept': 'text/xml',
-             //   'Access-Control-Allow-Origin': '*'
+                'Accept': 'text/xml',
+                //   'Access-Control-Allow-Origin': '*'
             }
         }).then(res => {
             console.log('Received response', res.status, typeof res.data)
@@ -85,6 +85,24 @@ const Fahrplan: FC = () => {
             .finally(() => setIsLoading(false))
     }, []);
 
+    function reload() {
+        setIsLoading(true)
+        axios.get(`https://corsproxy.io/?url=https%3A%2F%2Fapi.events.ccc.de%2Fcongress%2F2024%2Fschedule.xml?rand=${(new Date()).getTime()}`, {
+            headers: {
+                'Accept': 'text/xml',
+                //   'Access-Control-Allow-Origin': '*'
+            }
+        }).then(res => {
+            console.log('Received response', res.status, typeof res.data)
+            const body = mapXmltoInternalModel(fromXml(res.data))
+            setData(body)
+            setLastUpdated((new Date()).toISOString())
+            setError(undefined)
+        })
+            .catch(err => setError(err))
+            .finally(() => setIsLoading(false))
+    }
+
     if (error) {
         return <div className="Fahrplan-Error">failed to load: {JSON.stringify(error)}</div>
     }
@@ -96,7 +114,19 @@ const Fahrplan: FC = () => {
 
     return <div className="Fahrplan">
         {error && (<div className="Fahrplan-Error">failed to load: {JSON.stringify(error)}</div>)}
-        <p className="Fahrplan-LastUpdated">{lastUpdated}</p>
+        <p className="Fahrplan-LastUpdated">
+            {lastUpdated}
+            <span onClick={reload}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                     className="lucide lucide-refresh-cw">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                    <path d="M8 16H3v5"/>
+                </svg>
+            </span>
+        </p>
         <span className="Fahrplan-Expand" onClick={() => setExpanded(!expanded)}>{expanded ? 'Hide' : 'Show'} hidden entries</span>
         {expanded &&
             <div className="RemovedEvents">

@@ -19,6 +19,11 @@
 
 .Fahrplan-Loading,
 .Fahrplan-LastUpdated {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
   color: #fff;
   margin: 1em;
   text-align: center;

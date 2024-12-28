@@ -1,93 +1,103 @@
 .Appointment {
-  display: grid;
-  grid-template-areas: "time meta"
+    display: grid;
+    grid-template-areas: "time meta"
       "title title"
 "room room"
   "link buttons"
 "abstract abstract";
-  margin: 1em 0;
-  padding: 1em;
-  border: 1px solid #555;
-  text-align: left;
-  background-color: #333;
-  color: #fff;
-  cursor: pointer;
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid #555;
+    text-align: left;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
 
-  &.isBigTalk {
-    border-width: 1rem;
-  }
-
-  &.isRunning {
-    border-color: #050;
-    background-color: #030;
-  }
-
-  &.isFavorite {
-    border-color: orange;
+    &.isBigTalk {
+        border-width: 1rem;
+    }
 
     &.isRunning {
-      background-color: #885c00;
+        border-color: #050;
+        background-color: #030;
     }
-  }
+
+    &.isFavorite {
+        border-color: orange;
+
+        &.isRunning {
+            background-color: #885c00;
+        }
+    }
 }
 
 .Appointment-Link {
-  margin-top: 1rem;
-  & > a {
-    color: lightgreen;
-    text-decoration: none;
-  }
+    margin-top: 1rem;
+
+    & > a {
+        color: lightgreen;
+        text-decoration: none;
+    }
 }
 
 .Appointment-Time {
-  grid-area: time;
-  margin: 0;
+    grid-area: time;
+    margin: 0;
 }
 
 .Appointment-Title {
-  grid-area: title;
-  margin: 0.5rem 0;
+    grid-area: title;
+    margin: 0.5rem 0;
 }
 
 .Appointment-Meta {
-  grid-area: meta;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
+    grid-area: meta;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .Appointment-Room {
-  grid-area: room;
-  margin: 0;
-  font-style: italic;
+    grid-area: room;
+    margin: 0;
+    font-style: italic;
 }
 
 .Appointment-Abstract {
-  grid-area: abstract;
-  opacity: .7;
-  max-width: 100%;
-  word-wrap: break-word;
+    grid-area: abstract;
+    opacity: .7;
+    max-width: 100%;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 
 .Appointment-Buttons {
-  grid-area: buttons;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-end;
-  max-width: 100%;
+    grid-area: buttons;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    max-width: 100%;
 }
 
 .Appointment-Button {
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, .4);
-  color: inherit;
-  border: 0;
-  margin-left: 0.5rem;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, .4);
+    color: inherit;
+    border: 0;
+    margin-left: 0.5rem;
 }
 
 svg.Appointment-DoNotRecord {
-  width: 1em;
-  height: auto;
-  padding-inline-end: 1em;
+    width: 1em;
+    height: auto;
+    padding-inline-end: 1em;
 }
