@@ -68,9 +68,12 @@
     grid-area: abstract;
     opacity: .7;
     max-width: 100%;
+    white-space: pre-wrap;
     word-wrap: break-word;
     -ms-word-break: break-all;
     word-break: break-all;
+    font-family: inherit;
+    font-size: inherit;
 
     /* Non standard for webkit */
     word-break: break-word;

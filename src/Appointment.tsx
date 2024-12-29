@@ -1,7 +1,6 @@
 import {FC, useState} from 'react';
 import './Appointment.css';
 import {useLocalStorage} from './utils';
-import {Talk} from "./models";
 import {XmlEvent} from "./models-xml";
 
 const bigRooms = ['Saal 1', 'Saal GLITCH', 'Saal ZIGZAG']
@@ -34,8 +33,8 @@ function isRunning(event: XmlEvent): boolean {
     return now >= getStartTime(event) && now <= getEndTime(event)
 }
 
-export function getDuration(talk: Talk): number {
-    return ((getEndTime(talk) - getStartTime(talk)) / 1000 / 60)
+function formatDescription(description: string): string {
+    return description.split('&#13;').join('\n')
 }
 
 interface Props {
@@ -67,6 +66,9 @@ const Appointment: FC<Props> = ({talk, showRemoved = false}: Props) => {
     const isBigTalk = room ? bigRooms.includes(room) : false
     const isCurrentlyRunning = isRunning(talk)
 
+    const abstract = formatDescription(talk.abstract)
+    const description = formatDescription(talk.description)
+
     function toggleDetails() {
         setIsExpanded(!isExpanded)
     }
@@ -88,7 +90,7 @@ const Appointment: FC<Props> = ({talk, showRemoved = false}: Props) => {
                 <button className="Appointment-Button favorite" onClick={() => setIsFavorite(!isFavorite)}>Favorite
                 </button>
             </div>
-            <p className="Appointment-Abstract"><br/>{talk.abstract}<br/><br/>{talk.description}</p></>}
+            <pre className="Appointment-Abstract"><br/>{abstract}<br/><br/>{description}</pre></>}
     </div>;
 };
 
