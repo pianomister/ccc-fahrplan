@@ -34,7 +34,9 @@ function isRunning(event: XmlEvent): boolean {
 }
 
 function formatDescription(description: string): string {
-    return description.split('&#13;').join('\n')
+    return description
+        .replaceAll('&#13;','\n')
+        .replaceAll(/(\n){2,}/gi,'\n\n')
 }
 
 interface Props {
